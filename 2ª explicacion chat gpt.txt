@@ -1,0 +1,113 @@
+Para poder mostrar todo el inventario con el código que proporcionaste, debes asegurarte de que la clase `Producto` esté definida adecuadamente y tenga un método para representar sus atributos de manera legible. Además, como ya tienes el método `mostrar_productos` en la clase `Inventario`, solo necesitas asegurarte de que se invoca correctamente y que los productos se representen de una manera clara.
+
+Voy a darte un ejemplo de cómo podrías hacerlo:
+
+1. **Definir la clase `Producto`**: Esto es necesario para que el inventario contenga objetos de productos que tengan atributos como nombre, número de serie, precio y cantidad.
+2. **Modificar la representación de los productos**: Asegúrate de que la clase `Producto` tenga un método especial `__str__` para imprimir el producto de manera legible.
+
+### Ejemplo completo:
+
+```python
+# Definición de la clase Producto
+class Producto:
+    def __init__(self, n_serie, nombre, precio, cantidad):
+        self.n_serie = n_serie
+        self.nombre = nombre
+        self.precio = precio
+        self.cantidad = cantidad
+    
+    def __str__(self):
+        return f"ID: {self.n_serie} - {self.nombre} | Precio: ${self.precio} | Cantidad: {self.cantidad}"
+
+# Definición de la clase Inventario
+class Inventario:
+    def __init__(self):
+        self.productos = {}  # Usamos un diccionario para almacenar productos por ID
+    
+    def agregar_producto(self, producto):
+        if producto.n_serie in self.productos:
+            print("Error: El producto ya existe en el inventario.")
+        else:
+            self.productos[producto.n_serie] = producto
+            print(f"Producto '{producto.nombre}' agregado con éxito.")
+    
+    def actualizar_producto(self, n_serie, nuevo_nombre=None, nuevo_precio=None, nueva_cantidad=None):
+        if n_serie in self.productos:
+            producto = self.productos[n_serie]
+            if nuevo_nombre:
+                producto.nombre = nuevo_nombre
+            if nuevo_precio:
+                producto.precio = nuevo_precio
+            if nueva_cantidad is not None:
+                producto.cantidad = nueva_cantidad
+            print(f"Producto '{producto.nombre}' actualizado con éxito.")
+        else:
+            print("Error: Producto no encontrado.")
+    
+    def eliminar_producto(self, n_serie):
+        if n_serie in self.productos:
+            del self.productos[n_serie]
+            print(f"Producto con ID {n_serie} eliminado con éxito.")
+        else:
+            print("Error: Producto no encontrado.")
+    
+    def mostrar_productos(self):
+        if self.productos:
+            print("Inventario completo:")
+            for producto in self.productos.values():
+                print(producto)  # Esto llama al método __str__ de la clase Producto
+        else:
+            print("El inventario está vacío.")
+
+# Crear un inventario
+mi_inventario = Inventario()
+
+# Agregar productos
+producto1 = Producto("A001", "Laptop", 1500, 10)
+producto2 = Producto("A002", "Smartphone", 800, 15)
+
+mi_inventario.agregar_producto(producto1)
+mi_inventario.agregar_producto(producto2)
+
+# Mostrar todos los productos
+mi_inventario.mostrar_productos()
+
+# Actualizar un producto
+mi_inventario.actualizar_producto("A001", nuevo_precio=1400)
+
+# Eliminar un producto
+mi_inventario.eliminar_producto("A002")
+
+# Mostrar todos los productos después de cambios
+mi_inventario.mostrar_productos()
+```
+
+### Explicación:
+
+1. **Clase `Producto`**: 
+   - La clase `Producto` tiene los atributos `n_serie`, `nombre`, `precio` y `cantidad`.
+   - El método `__str__` se utiliza para representar el producto de forma legible cuando se imprime el objeto. Esto nos permite ver una descripción del producto, incluyendo su ID, nombre, precio y cantidad.
+
+2. **Clase `Inventario`**:
+   - La clase `Inventario` maneja un diccionario `productos`, donde las claves son los números de serie (`n_serie`) de los productos y los valores son los objetos `Producto`.
+   - El método `mostrar_productos()` recorre el diccionario `self.productos` y usa el método `__str__()` de cada producto para imprimir sus detalles.
+
+### Salida esperada:
+
+Cuando ejecutas el código anterior, el inventario se muestra de la siguiente manera:
+
+```
+Producto 'Laptop' agregado con éxito.
+Producto 'Smartphone' agregado con éxito.
+Inventario completo:
+ID: A001 - Laptop | Precio: $1500 | Cantidad: 10
+ID: A002 - Smartphone | Precio: $800 | Cantidad: 15
+Producto 'Laptop' actualizado con éxito.
+Producto con ID A002 eliminado con éxito.
+Inventario completo:
+ID: A001 - Laptop | Precio: $1400 | Cantidad: 10
+```
+
+### Resumen:
+- La función `mostrar_productos()` recorre todos los productos en el inventario y los imprime usando la representación legible definida en el método `__str__` de la clase `Producto`.
+- Esto te permitirá ver todos los productos almacenados en el inventario de manera estructurada.
